@@ -21,5 +21,5 @@ void loop() {
 
   Serial.print("Throttle: ");
   Serial.println(throttle);
-  delay(50);
+  delay(10);
 }
