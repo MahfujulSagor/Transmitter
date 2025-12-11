@@ -1,5 +1,5 @@
 # Transmitter codes
 
 ## Warning
-- Nano new boot loader uses 115200 upload speed
-- Nano old boot loader uses 57600 upload speed
+- Nano new boot loader uses 115200 baud upload speed
+- Nano old boot loader uses 57600 baud upload speed
