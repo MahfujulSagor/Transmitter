@@ -7,7 +7,12 @@ RF24 radio(7, 8);
 // 5-byte address (must match RX side)
 const byte address[6] = "DRONE";
 
-uint16_t throttle = 0;
+struct ControlPacket {
+  uint16_t throttle;
+  uint16_t yaw;
+  uint16_t pitch;
+  uint16_t roll;
+};
 
 void setup() {
   Serial.begin(9600);
@@ -28,14 +33,26 @@ void setup() {
 }
 
 void loop() {
-  throttle = analogRead(A0); // read throttle value
+  ControlPacket packet;
+  // A0 is Throttle, A1 is Yaw, A2 is roll, A3 is Pitch
+  packet.throttle = analogRead(A0); // 0-1023
+  packet.yaw      = analogRead(A1);
+  packet.roll     = analogRead(A2);
+  packet.pitch    = analogRead(A3);
 
-  bool ok = radio.write(&throttle, sizeof(throttle));
+  bool ok = radio.write(&packet, sizeof(packet));
 
   Serial.print("Throttle: ");
-  Serial.println(throttle);
-  Serial.print("ACK: ");
-  Serial.println(ok ? "YES" : "NO");
+  Serial.print(packet.throttle);
+  Serial.print("| Yaw: ");
+  Serial.print(packet.yaw);
+  Serial.print("| Pitch: ");
+  Serial.print(packet.pitch);
+  Serial.print("| Roll: ");
+  Serial.println(packet.roll);
 
-  delay(500); // slight delay to let RX process
+  Serial.print("ACK: ");
+  Serial.println(ok ? "Yes" : "No");
+
+  delay(20); // slight delay to let RX process
 }
