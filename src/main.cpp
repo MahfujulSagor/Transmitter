@@ -8,7 +8,6 @@ RF24 radio(7, 8);
 const byte address[6] = "DRONE";
 
 // Value to send (0-255)
-// const char message[6] = "SAGOR";
 struct Data {
   byte throttle;
   byte yaw;
