@@ -7,16 +7,9 @@ RF24 radio(7, 8);
 // 5-byte address (must match RX side)
 const byte address[6] = "DRONE";
 
-// Value to send (0-255)
-struct Data {
-  byte throttle;
-  byte yaw;
-  byte pitch;
-  byte roll;
-};
+uint16_t throttle = 0;
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
 
   radio.begin();
@@ -26,30 +19,23 @@ void setup()
   radio.setPALevel(RF24_PA_HIGH);
 
   radio.setAutoAck(true);
-  radio.setRetries(5, 15); // delay, count
   radio.setCRCLength(RF24_CRC_16);
 
   radio.openWritingPipe(address);
   radio.stopListening(); // TX mode
 
-  Serial.println("Text transmitter ready");
+  Serial.println("Transmitter ready");
 }
 
-void loop()
-{
-  Data dataToSend;
-  dataToSend.throttle = 150; // example throttle value
-  dataToSend.yaw = 128;      // example yaw value
-  dataToSend.pitch = 100;    // example pitch value
-  dataToSend.roll = 200;     // example roll value
-  bool ok = radio.write(&dataToSend, sizeof(dataToSend));
-  if (ok)
-  {
-    Serial.println("TX: Sent successfully");
-  }
-  else
-  {
-    Serial.println("TX: Send failed");
-  }
+void loop() {
+  throttle = analogRead(A0); // read throttle value
+
+  bool ok = radio.write(&throttle, sizeof(throttle));
+
+  Serial.print("Throttle: ");
+  Serial.println(throttle);
+  Serial.print("ACK: ");
+  Serial.println(ok ? "YES" : "NO");
+
   delay(500); // slight delay to let RX process
 }
