@@ -37,8 +37,8 @@ void loop() {
   // A0 is Throttle, A1 is Yaw, A2 is roll, A3 is Pitch
   packet.throttle = analogRead(A0); // 0-1023
   packet.yaw      = analogRead(A1);
-  packet.roll     = analogRead(A2);
-  packet.pitch    = analogRead(A3);
+  packet.pitch    = analogRead(A2);
+  packet.roll     = analogRead(A3);
 
   bool ok = radio.write(&packet, sizeof(packet));
 
@@ -54,5 +54,5 @@ void loop() {
   Serial.print("ACK: ");
   Serial.println(ok ? "Yes" : "No");
 
-  delay(20); // slight delay to let RX process
+  delay(20);
 }
